@@ -1,69 +1,510 @@
 <!doctype html>
 <html lang="vi">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Thiệp Cưới - Nguyễn An & Trần Bình</title>
-  <style>
-    body{margin:0;font-family:Inter, sans-serif;background:#fff8f2;display:flex;align-items:center;justify-content:center;min-height:100vh}
-    .envelope{position:relative;width:320px;height:200px;background:#d98b8b;border-radius:12px;display:flex;align-items:center;justify-content:center;flex-direction:column;color:white;cursor:pointer;box-shadow:0 8px 20px rgba(0,0,0,0.2);}
-    .envelope h2{margin:0;font-size:20px;font-weight:500}
-    .hidden{display:none}
-    .card{max-width:960px;margin:20px auto;background:white;border-radius:12px;box-shadow:0 8px 30px rgba(0,0,0,0.15);overflow:hidden;padding:20px;animation:fadeIn 0.6s ease}
-    @keyframes fadeIn{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
-    h1{font-family:'Playfair Display',serif;font-size:32px;color:#4b2f2f;text-align:center}
-    .section{margin-top:20px}
-    .section h3{color:#b35a5a;margin-bottom:8px}
-    .gallery{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px;margin-top:12px}
-    .gallery img{width:100%;border-radius:8px;object-fit:cover;box-shadow:0 4px 10px rgba(0,0,0,0.1)}
-    .details p{margin:6px 0}
-    .btn{display:inline-block;padding:10px 16px;background:#d98b8b;color:white;border-radius:8px;text-decoration:none;margin-top:10px}
-  </style>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Thiệp Cưới — Đăng & Tuyên</title>
+<meta name="description" content="Thiệp cưới tương tác: phong bì mở thiệp, ảnh kỷ niệm, hiệu ứng hoa rơi."/>
+<style>
+  :root{
+    --bg:#fff9f7;
+    --ink:#3b2e2a;
+    --accent:#c0526d;      /* hồng rượu */
+    --accent-2:#f3c6cf;    /* pastel */
+    --gold:#c29b4d;
+    --paper:#fffdfb;
+    --shadow:0 10px 30px rgba(0,0,0,.12);
+    --curve:22px;
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{
+    margin:0;
+    font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+    color:var(--ink);
+    background:
+      radial-gradient(1200px 600px at 10% -10%, #ffe8ef66 0, transparent 60%),
+      radial-gradient(1000px 500px at 110% 0%, #ffe8ef66 0, transparent 60%),
+      var(--bg);
+    overflow-x:hidden;
+  }
+
+  /* ===== Scene (envelope stage) ===== */
+  .scene{
+    min-height:100dvh;
+    display:grid;
+    place-items:center;
+    position:relative;
+    padding:28px 16px;
+  }
+  .envelope-wrap{
+    position:relative;
+    width:min(540px, 92vw);
+    aspect-ratio:4/3;
+    perspective:1200px;
+  }
+  .envelope{
+    width:100%; height:100%;
+    position:relative;
+    transform-style:preserve-3d;
+    transition:transform .9s cubic-bezier(.2,.7,.1,1);
+  }
+  .envelope .body{
+    position:absolute; inset:0;
+    background:linear-gradient(180deg,#fff,#fff9f7);
+    border-radius:16px;
+    box-shadow:var(--shadow);
+    border:1px solid #f3e8e2;
+  }
+  .envelope .liner{
+    position:absolute; inset:8px;
+    border-radius:12px;
+    background:
+      radial-gradient(16px 16px at 12px 12px, #ffd9e2 40%, transparent 41%) 0 0/28px 28px repeat,
+      radial-gradient(16px 16px at 12px 12px, #ffe9ef 40%, transparent 41%) 14px 14px/28px 28px repeat,
+      #fff;
+    clip-path:polygon(0 0,100% 0,100% 70%,0 70%);
+  }
+  .flap{
+    position:absolute; inset:0;
+    border-radius:16px;
+    transform-origin:top;
+    background:
+      linear-gradient(180deg,#ffe3ea,#fff5f7 60%, #ffffff),
+      repeating-linear-gradient(45deg,#ffd6e1 0 10px, #fff0f4 10px 20px);
+    border:1px solid #f1d8d8;
+    border-bottom:none;
+    clip-path:polygon(0 0,100% 0,50% 55%);
+    box-shadow:0 16px 40px rgba(0,0,0,.08);
+    transform:rotateX(0deg);
+    transition:transform .9s cubic-bezier(.2,.7,.1,1);
+  }
+  .letter-peek{
+    position:absolute; left:10%; right:10%; bottom:12%;
+    height:36%;
+    border-radius:12px;
+    background:var(--paper);
+    border:1px solid #f0e6e0;
+    box-shadow:0 10px 25px rgba(0,0,0,.08);
+    display:grid; place-items:center;
+    text-align:center;
+    padding:10px;
+  }
+  .peek-names{
+    font-family: ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
+    font-size:clamp(24px, 4vw, 36px);
+    color:var(--accent);
+    letter-spacing:.5px;
+  }
+  .open-btn{
+    position:absolute; inset:auto 0 12px 0; margin:auto;
+    width:max(160px, 40%);
+    padding:12px 18px;
+    border-radius:999px;
+    border:none; cursor:pointer;
+    background:linear-gradient(180deg, var(--accent), #a83b56);
+    color:#fff; font-weight:700; letter-spacing:.6px;
+    box-shadow:0 10px 20px rgba(192,82,109,.35);
+    transition:transform .15s ease, box-shadow .2s ease;
+  }
+  .open-btn:active{ transform:translateY(2px); box-shadow:0 6px 14px rgba(192,82,109,.3) }
+
+  .envelope.opened{ transform:translateY(-6vh) rotateX(14deg) }
+  .envelope.opened .flap{ transform:rotateX(160deg) }
+
+  /* ===== Invitation card ===== */
+  .invitation{
+    width:min(960px, 96vw);
+    margin:0 auto;
+    background:var(--paper);
+    border:1px solid #f1e9e4;
+    border-radius:var(--curve);
+    box-shadow:var(--shadow);
+    overflow:hidden;
+    transform:translateY(40px);
+    opacity:0;
+    transition:transform .8s cubic-bezier(.2,.7,.1,1), opacity .6s ease;
+  }
+  .invitation.show{ transform:translateY(0); opacity:1 }
+  .hero{
+    position:relative;
+    padding:52px 22px 32px;
+    text-align:center;
+    background:
+      radial-gradient(1200px 300px at 50% 0%, #fff0f4 0, transparent 60%),
+      #fff;
+  }
+  .hero .tag{
+    display:inline-block;
+    padding:6px 12px;
+    border-radius:999px;
+    background:#fff3f6;
+    border:1px solid #f3d8df;
+    color:#a43756; font-weight:700; letter-spacing:.8px;
+  }
+  .hero h1{
+    margin:14px 0 6px;
+    font-size: clamp(36px, 7vw, 60px);
+    line-height:1.05;
+    font-family: ui-serif, Georgia, "Times New Roman", Times, serif;
+    color:var(--accent);
+  }
+  .hero .sub{
+    color:#7b6a65;
+    font-size:clamp(14px, 2.6vw, 18px);
+  }
+  .divider{
+    height:14px; margin:18px auto 8px; width:160px;
+    background:
+      radial-gradient(circle at 10px 7px, var(--gold) 4px, transparent 5px) 0 0/40px 14px repeat-x,
+      radial-gradient(circle at 30px 7px, var(--gold) 4px, transparent 5px) 0 0/40px 14px repeat-x;
+    opacity:.35;
+    filter:saturate(1.2);
+  }
+
+  .two-col{
+    display:grid; gap:22px;
+    grid-template-columns:1fr;
+    padding:0 18px 26px;
+  }
+  @media(min-width:860px){
+    .two-col{ grid-template-columns:1.2fr .8fr; padding:0 28px 36px }
+  }
+  .card{
+    background:#fff;
+    border:1px solid #f1e8e3;
+    border-radius:16px;
+    padding:18px;
+    box-shadow:0 6px 16px rgba(0,0,0,.05);
+  }
+  .card h3{
+    margin:6px 0 10px;
+    font-size:22px; color:#a43756;
+    letter-spacing:.3px;
+  }
+  .card p{ margin:8px 0; color:#584e4a }
+
+  .timeline{
+    display:grid; gap:12px; margin-top:6px;
+  }
+  .t-item{
+    display:grid; grid-template-columns:auto 1fr;
+    gap:10px; align-items:center;
+    padding:10px 12px; border-radius:12px;
+    border:1px dashed #f0d7de; background:#fff8fa;
+  }
+  .t-item .time{
+    font-weight:800; color:#a43756;
+    background:#ffe9ef; padding:6px 10px; border-radius:999px;
+  }
+
+  /* ===== Gallery Masonry-like ===== */
+  .gallery{
+    padding:8px 8px 24px;
+    display:grid;
+    grid-template-columns:repeat(2, 1fr);
+    gap:8px;
+  }
+  @media(min-width:700px){
+    .gallery{ grid-template-columns:repeat(4, 1fr); gap:10px }
+  }
+  .shot{
+    position:relative;
+    border-radius:14px; overflow:hidden;
+    aspect-ratio:1/1;
+    box-shadow:0 8px 18px rgba(0,0,0,.06);
+    transform:translateY(20px);
+    opacity:0;
+    transition:transform .6s ease, opacity .6s ease;
+  }
+  .shot.tall{ aspect-ratio:3/4 }
+  .shot.wide{ aspect-ratio:4/3 }
+  .shot.in{ transform:translateY(0); opacity:1 }
+  .shot img{ width:100%; height:100%; object-fit:cover; display:block }
+  .shot::after{
+    content:"❤";
+    position:absolute; right:10px; bottom:6px; font-size:14px; opacity:.7;
+    filter:drop-shadow(0 2px 2px rgba(0,0,0,.25));
+  }
+
+  /* ===== Footer ===== */
+  .footer{
+    padding:24px 16px 34px; text-align:center; color:#6b5f5b;
+    background:linear-gradient(180deg,#fff, #fff6f8);
+    border-top:1px solid #f2e7e2;
+  }
+  .rsvp{
+    margin-top:10px;
+    display:flex; gap:8px; justify-content:center; flex-wrap:wrap;
+  }
+  .btn{
+    padding:10px 14px; border-radius:999px; border:1px solid #e7d6cf;
+    background:#fff; color:#6b5f5b; cursor:pointer; font-weight:700;
+    transition:transform .15s ease, box-shadow .2s ease, background .2s ease;
+  }
+  .btn:hover{ box-shadow:0 8px 18px rgba(0,0,0,.06); background:#fff9f7 }
+  .btn:active{ transform:translateY(1px) }
+
+  /* ===== Falling petals ===== */
+  .petals{ position:fixed; inset:0; pointer-events:none; overflow:hidden; z-index:0 }
+  .petal{
+    position:absolute; top:-10vh;
+    width:14px; height:12px;
+    background:radial-gradient(70% 100% at 60% 50%, #ff8fb0 0,#ffb2c6 60%, #ffd3df 100%);
+    border-radius:60% 40% 60% 40%;
+    opacity:.85;
+    filter:drop-shadow(0 2px 2px rgba(0,0,0,.15));
+    animation:fall linear infinite, sway ease-in-out infinite;
+  }
+  @keyframes fall{
+    to{ transform:translateY(110vh) rotate(360deg) }
+  }
+  @keyframes sway{
+    0%,100%{ margin-left:-10px }
+    50%{ margin-left:10px }
+  }
+
+  /* ===== Appear on scroll ===== */
+  .reveal{ opacity:0; transform:translateY(18px); transition:transform .7s ease, opacity .7s ease }
+  .reveal.in{ opacity:1; transform:translateY(0) }
+
+  /* Raise envelope above petals */
+  .envelope-wrap, .invitation{ position:relative; z-index:2 }
+</style>
 </head>
 <body>
-  <div id="envelope" class="envelope">
-    <h2>Thiệp Cưới</h2>
-    <p>Nguyễn An & Trần Bình</p>
-    <small>Nhấn để mở</small>
-  </div>
 
-  <div id="card" class="hidden">
-    <div class="card">
-      <h1>Nguyễn An & Trần Bình</h1>
-      <div class="section details">
-        <h3>Thông tin sự kiện</h3>
-        <p><strong>Ngày:</strong> Chủ nhật, 21 Tháng 12, 2025 — 16:30</p>
-        <p><strong>Địa điểm:</strong> Khu vườn Riverside, 123 Đường Hoa, Quận 7, TP. HCM</p>
-        <p><strong>Lịch trình:</strong></p>
-        <ul>
-          <li>16:30 — Đón khách & khai mạc</li>
-          <li>17:00 — Lễ gia tiên</li>
-          <li>18:00 — Tiệc tối & giao lưu</li>
-        </ul>
-        <p><strong>Ghi chú:</strong> Xin mặc trang phục smart casual. Có khu để xe và ăn chay theo yêu cầu.</p>
-      </div>
+  <div class="scene">
+    <!-- Falling petals -->
+    <div class="petals" id="petals"></div>
 
-      <div class="section">
-        <h3>Album ảnh cưới</h3>
-        <div class="gallery">
-          <img src="https://via.placeholder.com/400x300?text=Ảnh+1" alt="Ảnh cưới 1">
-          <img src="https://via.placeholder.com/400x300?text=Ảnh+2" alt="Ảnh cưới 2">
-          <img src="https://via.placeholder.com/400x300?text=Ảnh+3" alt="Ảnh cưới 3">
-          <img src="https://via.placeholder.com/400x300?text=Ảnh+4" alt="Ảnh cưới 4">
+    <!-- Envelope stage -->
+    <div class="envelope-wrap">
+      <div class="envelope" id="envelope">
+        <div class="body"></div>
+        <div class="liner"></div>
+        <div class="flap"></div>
+        <div class="letter-peek">
+          <div class="peek-names">Đăng &amp; Tuyên</div>
+          <div style="font-size:12px;color:#8d7b76">Trân trọng kính mời</div>
         </div>
-      </div>
-
-      <div class="section">
-        <a class="btn" href="https://www.google.com/maps?q=10.7400,106.7000" target="_blank">Xem bản đồ</a>
+        <button class="open-btn" id="openBtn" aria-label="Mở thiệp">Mở thiệp</button>
       </div>
     </div>
+
+    <!-- Invitation card -->
+    <article class="invitation" id="invite">
+      <section class="hero">
+        <span class="tag">Thiệp Cưới</span>
+        <h1>Đăng &amp; Tuyên</h1>
+        <div class="sub">“Yêu là cùng nhau nhìn về một hướng.”</div>
+        <div class="divider"></div>
+        <div class="reveal">
+          <p style="max-width:760px;margin:10px auto 0;line-height:1.7">
+            Chúng mình hân hạnh gửi đến Anh/Chị lời mời tham dự Lễ Thành Hôn của <strong>Đăng</strong> và <strong>Tuyên</strong>.
+            Sự hiện diện của Anh/Chị là niềm vinh hạnh và là lời chúc phúc quý giá cho đôi bên.
+          </p>
+        </div>
+      </section>
+
+      <section class="two-col">
+        <div class="card reveal">
+          <h3>Thông tin buổi lễ</h3>
+          <p><strong>Ngày:</strong> Chủ nhật, 21 tháng 9, 2025</p>
+          <p><strong>Thời gian:</strong> 10:00 — 14:00</p>
+          <p><strong>Địa điểm:</strong> Nhà hàng Hoa Hồng – Sảnh Ruby, 123 Đường Hạnh Phúc, Q.1, TP.HCM</p>
+          <p><strong>Dresscode:</strong> Pastel nhẹ nhàng (Trắng/Hồng/Nude)</p>
+          <p><strong>Gợi ý gửi lời chúc:</strong> Mang theo nụ cười & câu chúc ngọt ngào! 💌</p>
+        </div>
+
+        <div class="card reveal">
+          <h3>Lịch trình</h3>
+          <div class="timeline">
+            <div class="t-item">
+              <div class="time">09:30</div>
+              <div>Đón khách & chụp ảnh check-in</div>
+            </div>
+            <div class="t-item">
+              <div class="time">10:15</div>
+              <div>Nghi thức lễ – ra mắt hai họ</div>
+            </div>
+            <div class="t-item">
+              <div class="time">11:00</div>
+              <div>Dùng tiệc & văn nghệ</div>
+            </div>
+            <div class="t-item">
+              <div class="time">13:30</div>
+              <div>Trao quà & lời cảm ơn</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="card reveal" style="margin:0 16px 12px">
+        <h3>Lời nhắn gửi</h3>
+        <p style="line-height:1.8">
+          Đám cưới là hành trình nhỏ mở ra một chặng đường dài.
+          Chúng mình mong được nắm tay bạn bè và người thân trong ngày đặc biệt này.
+          Mọi lời chúc, mọi nụ cười đều là món quà vô giá.
+        </p>
+      </section>
+
+      <!-- Gallery -->
+      <section class="reveal" aria-label="Ảnh kỷ niệm">
+        <div class="divider" style="opacity:.5"></div>
+        <div style="text-align:center;padding:10px 16px 0">
+          <h3 style="margin:0;color:#a43756">Kỷ niệm của chúng mình</h3>
+          <p style="color:#6e605b;margin:6px 0 0">Một vài khoảnh khắc ngọt ngào trước ngày về chung một nhà.</p>
+        </div>
+        <div class="gallery" id="gallery"></div>
+      </section>
+
+      <section class="two-col" style="padding-bottom:10px">
+        <div class="card reveal">
+          <h3>Thông tin liên hệ</h3>
+          <p><strong>Nhà trai:</strong> Anh Hoàng (Phụ rể) – 0900 123 456</p>
+          <p><strong>Nhà gái:</strong> Chị Thu (Phù dâu) – 0900 654 321</p>
+          <p><strong>Email:</strong> anbinh.wedding@example.com</p>
+        </div>
+        <div class="card reveal">
+          <h3>Bản đồ (minh họa)</h3>
+          <div style="aspect-ratio:16/10;border-radius:12px;overflow:hidden;border:1px solid #f0e4df">
+            <!-- Map placeholder: decorative -->
+            <svg viewBox="0 0 800 500" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <linearGradient id="g" x1="0" x2="1">
+                  <stop offset="0" stop-color="#ffe6ed"/>
+                  <stop offset="1" stop-color="#fff"/>
+                </linearGradient>
+              </defs>
+              <rect width="800" height="500" fill="url(#g)"/>
+              <g fill="none" stroke="#e5cdd2" stroke-width="6" opacity=".9">
+                <path d="M20,380 C200,300 300,450 500,360 S760,280 780,320"/>
+                <path d="M40,120 C200,180 300,80 520,160 S700,230 760,220"/>
+                <path d="M100,260 Q280,220 360,280 T740,300"/>
+              </g>
+              <g>
+                <circle cx="520" cy="220" r="10" fill="#c0526d"/>
+                <text x="540" y="230" font-size="22" fill="#a43756" font-family="Georgia, serif">Sảnh Ruby</text>
+              </g>
+            </svg>
+          </div>
+          <p style="margin-top:10px;color:#6b5f5b">Nhấn mở trên Google Maps khi dùng bản thực tế.</p>
+        </div>
+      </section>
+
+      <footer class="footer">
+        <div>Rất mong được đón tiếp Anh/Chị.</div>
+        <div class="rsvp">
+          <button class="btn" onclick="alert('Cảm ơn! Chúng mình đã ghi nhận RSVP của bạn ❤')">Xác nhận tham dự</button>
+          <button class="btn" onclick="alert('Cảm ơn bạn đã gửi lời chúc!')">Gửi lời chúc</button>
+        </div>
+        <div style="margin-top:14px;font-size:13px;opacity:.7">Thiệp tương tác — thiết kế bởi bạn ✨</div>
+      </footer>
+    </article>
   </div>
 
-  <script>
-    document.getElementById('envelope').addEventListener('click',()=>{
-      document.getElementById('envelope').classList.add('hidden');
-      document.getElementById('card').classList.remove('hidden');
+<script>
+  // ===== Envelope open -> show invitation =====
+  const openBtn = document.getElementById('openBtn');
+  const envelope = document.getElementById('envelope');
+  const invite = document.getElementById('invite');
+
+  openBtn.addEventListener('click', () => {
+    envelope.classList.add('opened');
+    // reveal after flap opens
+    setTimeout(()=> invite.classList.add('show'), 700);
+    // scroll to card after reveal (mobile UX)
+    setTimeout(()=> invite.scrollIntoView({behavior:'smooth', block:'start'}), 800);
+  }, {once:true});
+
+  // ===== Falling petals generator =====
+  const petals = document.getElementById('petals');
+  const PETAL_COUNT = 26;
+  function spawnPetal(){
+    const s = document.createElement('span');
+    s.className = 'petal';
+    const startLeft = Math.random()*100; // vw
+    const size = 10 + Math.random()*18;
+    const dur = 8 + Math.random()*10;
+    const delay = Math.random()*-dur;
+    s.style.left = startLeft + 'vw';
+    s.style.width = size + 'px';
+    s.style.height = (size*0.85) + 'px';
+    s.style.animationDuration = dur + 's, ' + (3+Math.random()*3) + 's';
+    s.style.animationDelay = delay + 's, ' + (Math.random()*-4)+'s';
+    // subtle rotation shape
+    s.style.borderRadius = `${60+Math.random()*30}% ${40+Math.random()*30}% ${60+Math.random()*30}% ${40+Math.random()*30}%`;
+    petals.appendChild(s);
+    // cleanup when finished a couple of cycles
+    setTimeout(()=> s.remove(), (dur*2+5)*1000);
+  }
+  // initial burst
+  for(let i=0;i<PETAL_COUNT;i++) spawnPetal();
+  // continuous gentle fall
+  setInterval(()=> spawnPetal(), 600);
+
+  // ===== Build gallery images (inline SVG placeholders) =====
+  const gallery = document.getElementById('gallery');
+  const shots = 4;
+  function svgDataURI(hue, text){
+    const svg = `
+      <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 800 600'>
+        <defs>
+          <linearGradient id='g' x1='0' x2='1'>
+            <stop offset='0' stop-color='hsl(${hue},70%,90%)'/>
+            <stop offset='1' stop-color='hsl(${(hue+20)%360},85%,97%)'/>
+          </linearGradient>
+        </defs>
+        <rect width='800' height='600' fill='url(#g)'/>
+        <g fill='none' stroke='hsl(${(hue+330)%360},35%,55%)' stroke-width='6' opacity='.5'>
+          <path d='M20,520 C180,420 360,630 560,520 S820,420 780,520'/>
+          <path d='M40,120 C260,220 360,80 560,160 S740,240 760,220'/>
+        </g>
+        <text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle'
+              font-family='Georgia, serif' font-size='56' fill='hsl(${(hue+330)%360},40%,35%)'>Kỷ niệm</text>
+        <text x='50%' y='58%' dominant-baseline='middle' text-anchor='middle'
+              font-family='Arial' font-size='22' fill='hsl(${(hue+330)%360},28%,32%)' opacity='.9'>Đăng & Tuyên</text>
+      </svg>`;
+    return 'data:image/svg+xml;utf8,' + encodeURIComponent(svg);
+  }
+  const imgUrls = ['./download.jpg', './download (1).jpg', './download (2).jpg', './download (3).jpg']
+  for(let i=0;i<shots;i++){
+    const div = document.createElement('div');
+    div.className = 'shot';
+    if(i%5===0) div.classList.add('tall');
+    if(i%7===0) div.classList.add('wide');
+    const img = document.createElement('img');
+    img.alt = 'Ảnh kỷ niệm';
+    img.loading = 'lazy';
+    // img.src = svgDataURI(330 + (i*10)%60, 'Kỷ niệm');
+    img.src = imgUrls[i];
+    div.appendChild(img);
+    gallery.appendChild(div);
+  }
+
+  // ===== Appear on scroll (sections & shots) =====
+  const io = new IntersectionObserver(entries=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting){
+        e.target.classList.add('in');
+        io.unobserve(e.target);
+      }
     });
-  </script>
+  }, {threshold:.18});
+
+  document.querySelectorAll('.reveal, .shot').forEach(el=> io.observe(el));
+
+  // ===== Accessibility niceties =====
+  document.addEventListener('keydown', (e)=>{
+    if((e.key==='Enter' || e.key===' ') && !invite.classList.contains('show')){
+      openBtn.click();
+    }
+  });
+
+  // ===== Helper: replace gallery with your real photos =====
+  // Chỉ cần thay img.src bằng đường dẫn ảnh thật của bạn,
+  // hoặc chèn thêm <div class="shot"><img src="..."/></div> vào #gallery.
+</script>
 </body>
 </html>
