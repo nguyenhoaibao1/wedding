@@ -2,12 +2,25 @@
 <html lang="vi">
 
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <!-- <meta charset="utf-8" /> -->
+  <meta charset="UTF-8">
+  <!-- <meta name="viewport" content="width=device-width, initial-scale=1" /> -->
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
   <title>Thiệp Cưới — Đăng & Tuyên</title>
   <meta name="description" content="Thiệp cưới tương tác: phong bì mở thiệp, ảnh kỷ niệm, hiệu ứng hoa rơi." />
   <link rel="stylesheet" href="style.css">
   <script src="script.js" defer></script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bonheur+Royale&display=swap" rel="stylesheet">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Bonheur+Royale&family=Charmonman:wght@400;700&family=Playwrite+AU+NSW:wght@100..400&family=Playwrite+AU+TAS:wght@100..400&family=Playwrite+GB+J:ital,wght@0,100..400;1,100..400&family=Playwrite+HU:wght@100..400&family=Playwrite+US+Trad:wght@100..400&family=Sriracha&display=swap"
+    rel="stylesheet">
 </head>
 
 <body>
@@ -26,8 +39,8 @@
         <div class="liner"></div>
         <div class="flap"></div>
         <div class="letter-peek">
-          <div class="peek-names">Đăng &amp; Tuyên</div>
-          <div style="font-size:12px;color:#8d7b76">Trân trọng kính mời</div>
+          <div class="peek-names">Hải Đăng &amp; Cẩm Tuyên</div>
+          <div style="font-size:12px;color:#8d7b76; margin-bottom:15px">Trân trọng kính mời</div>
         </div>
         <button class="open-btn" id="openBtn" aria-label="Mở thiệp">Mở thiệp</button>
       </div>
@@ -37,15 +50,37 @@
     <article class="invitation" id="invite">
       <section class="hero">
         <span class="tag">Thiệp Cưới</span>
-        <h1>Đăng &amp; Tuyên</h1>
+        <h1>Hải Đăng &amp; Cẩm Tuyên</h1>
         <div class="sub">“Yêu là cùng nhau nhìn về một hướng.”</div>
         <div class="divider"></div>
         <div class="reveal">
           <p style="max-width:760px;margin:10px auto 0;line-height:1.7">
-            Chúng mình hân hạnh gửi đến Anh/Chị lời mời tham dự Lễ Thành Hôn của <strong>Đăng</strong> và
-            <strong>Tuyên</strong>.
+            Chúng mình hân hạnh gửi đến Anh/Chị lời mời tham dự Tiệc cưới của <strong class="peek-names">Đăng</strong>
+            và
+            <strong class="peek-names">Tuyên</strong>.
             Sự hiện diện của Anh/Chị là niềm vinh hạnh và là lời chúc phúc quý giá cho đôi bên.
           </p>
+        </div>
+      </section>
+
+      <section class="section-countdown" style="margin:0 16px 12px">
+        <div class="countdown-container" id="countdown">
+          <div class="time-box">
+            <div class="time-value" id="days">00</div>
+            <div class="time-label">Ngày</div>
+          </div>
+          <div class="time-box">
+            <div class="time-value" id="hours">00</div>
+            <div class="time-label">Giờ</div>
+          </div>
+          <div class="time-box">
+            <div class="time-value" id="minutes">00</div>
+            <div class="time-label">Phút</div>
+          </div>
+          <div class="time-box">
+            <div class="time-value" id="seconds">00</div>
+            <div class="time-label">Giây</div>
+          </div>
         </div>
       </section>
 
@@ -54,9 +89,11 @@
           <h3>Thông tin buổi lễ</h3>
           <p><strong>Ngày:</strong> Chủ nhật, 21 tháng 9, 2025</p>
           <p><strong>Thời gian:</strong> 10:00 — 14:00</p>
-          <p><strong>Địa điểm:</strong> Nhà hàng Hoa Hồng – Sảnh Ruby, 123 Đường Hạnh Phúc, Q.1, TP.HCM</p>
-          <p><strong>Dresscode:</strong> Pastel nhẹ nhàng (Trắng/Hồng/Nude)</p>
+          <p><strong>Địa điểm:</strong> Nhà hàng Hoa Hồng – Sảnh Ruby, 123 Đường Hạnh Phúc, Q.1, Gia Lai</p>
           <p><strong>Gợi ý gửi lời chúc:</strong> Mang theo nụ cười & câu chúc ngọt ngào! 💌</p>
+          <i style="color:#6d2f3e;">Nếu bạn chưa tới nhà mình thì <a style="color:#7e8ee7;"
+              href="https://www.google.com/maps/place/Nh%C3%A0+Xe+B%E1%BA%A3y+Nh%C3%A0n/@13.9144981,109.2047624,15.75z/data=!4m6!3m5!1s0x316f410719450525:0x8373252b6b2b38af!8m2!3d13.9213125!4d109.2091875!16s%2Fg%2F11vhw4vbdc?entry=ttu&g_ep=EgoyMDI1MDgxMS4wIKXMDSoASAFQAw%3D%3D">
+              vào đây </a> để xem bản đồ nhé!</i>
         </div>
 
         <div class="card reveal">
@@ -101,17 +138,16 @@
         <div class="gallery" id="gallery"></div>
       </section>
 
-      <section class="two-col" style="padding-bottom:10px">
-        <div class="card reveal">
+      <!-- <section class="two-col" style="padding-bottom:10px"> -->
+      <section class="reveal" style="padding-bottom:10px">
+        <div class="card reveal " style="margin:0 16px 12px">
           <h3>Thông tin liên hệ</h3>
-          <p><strong>Nhà trai:</strong> Anh Hoàng (Phụ rể) – 0900 123 456</p>
-          <p><strong>Nhà gái:</strong> Chị Thu (Phù dâu) – 0900 654 321</p>
-          <p><strong>Email:</strong> anbinh.wedding@example.com</p>
+          <p><strong>Nhà gái:</strong> Cô Dâu - 0900 123 456</p>
+          <p><strong>Nhà trai:</strong> Chú rể - 0900 654 321</p>
         </div>
-        <div class="card reveal">
+        <!-- <div class="card reveal">
           <h3>Bản đồ (minh họa)</h3>
           <div style="aspect-ratio:16/10;border-radius:12px;overflow:hidden;border:1px solid #f0e4df">
-            <!-- Map placeholder: decorative -->
             <svg viewBox="0 0 800 500" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
               <defs>
                 <linearGradient id="g" x1="0" x2="1">
@@ -132,16 +168,16 @@
             </svg>
           </div>
           <p style="margin-top:10px;color:#6b5f5b">Nhấn mở trên Google Maps khi dùng bản thực tế.</p>
-        </div>
+        </div> -->
       </section>
 
       <footer class="footer">
         <div>Rất mong được đón tiếp Anh/Chị.</div>
-        <div class="rsvp">
+        <!-- <div class="rsvp">
           <button class="btn" onclick="alert('Cảm ơn! Chúng mình đã ghi nhận RSVP của bạn ❤')">Xác nhận tham dự</button>
           <button class="btn" onclick="alert('Cảm ơn bạn đã gửi lời chúc!')">Gửi lời chúc</button>
-        </div>
-        <div style="margin-top:14px;font-size:13px;opacity:.7">Thiệp tương tác — thiết kế bởi bạn ✨</div>
+        </div> -->
+        <div style="margin-top:14px;font-size:13px;opacity:.7">Thiết kế bởi Hoài Bảo ✨</div>
       </footer>
     </article>
   </div>

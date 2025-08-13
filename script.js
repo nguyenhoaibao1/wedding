@@ -103,3 +103,40 @@ document.getElementById('openBtn').addEventListener('click', () => {
   audio.currentTime = 59;
   audio.play();
 });
+
+// Thêm class 'opened' cho body khi mở thiệp
+openBtn.addEventListener('click', () => {
+  document.body.classList.add('opened');
+  envelope.classList.add('opened');
+
+  // ... phần còn lại giữ nguyên
+  setTimeout(() => invite.classList.add('show'), 700);
+  setTimeout(() => invite.scrollIntoView({ behavior: 'smooth', block: 'start' }), 800);
+}, { once: true });
+
+// Thời gian kết thúc (24 tiếng từ thời điểm hiện tại)
+const countDownDate = new Date("2025-10-01T24:00:00").getTime();
+
+// Cập nhật đếm ngược mỗi giây
+const x = setInterval(function () {
+  const now = new Date().getTime();
+  const distance = countDownDate - now;
+
+  // Tính toán ngày, giờ, phút, giây
+  const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+  const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+  const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+  const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+  // Hiển thị kết quả
+  document.getElementById("days").innerHTML = days.toString().padStart(2, "0");
+  document.getElementById("hours").innerHTML = hours.toString().padStart(2, "0");
+  document.getElementById("minutes").innerHTML = minutes.toString().padStart(2, "0");
+  document.getElementById("seconds").innerHTML = seconds.toString().padStart(2, "0");
+
+  // Nếu đếm ngược kết thúc
+  if (distance < 0) {
+    clearInterval(x);
+    document.getElementById("countdown").innerHTML = "ĐÃ HẾT GIỜ!";
+  }
+}, 1000);
