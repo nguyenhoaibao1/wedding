@@ -4,33 +4,33 @@ const envelope = document.getElementById('envelope');
 const invite = document.getElementById('invite');
 
 openBtn.addEventListener('click', () => {
-    envelope.classList.add('opened');
-    // reveal after flap opens
-    setTimeout(() => invite.classList.add('show'), 700);
-    // scroll to card after reveal (mobile UX)
-    setTimeout(() => invite.scrollIntoView({ behavior: 'smooth', block: 'start' }), 800);
+  envelope.classList.add('opened');
+  // reveal after flap opens
+  setTimeout(() => invite.classList.add('show'), 700);
+  // scroll to card after reveal (mobile UX)
+  setTimeout(() => invite.scrollIntoView({ behavior: 'smooth', block: 'start' }), 800);
 }, { once: true });
 
 // ===== Falling petals generator =====
 const petals = document.getElementById('petals');
 const PETAL_COUNT = 26;
 function spawnPetal() {
-    const s = document.createElement('span');
-    s.className = 'petal';
-    const startLeft = Math.random() * 100; // vw
-    const size = 10 + Math.random() * 18;
-    const dur = 8 + Math.random() * 10;
-    const delay = Math.random() * -dur;
-    s.style.left = startLeft + 'vw';
-    s.style.width = size + 'px';
-    s.style.height = (size * 0.85) + 'px';
-    s.style.animationDuration = dur + 's, ' + (3 + Math.random() * 3) + 's';
-    s.style.animationDelay = delay + 's, ' + (Math.random() * -4) + 's';
-    // subtle rotation shape
-    s.style.borderRadius = `${60 + Math.random() * 30}% ${40 + Math.random() * 30}% ${60 + Math.random() * 30}% ${40 + Math.random() * 30}%`;
-    petals.appendChild(s);
-    // cleanup when finished a couple of cycles
-    setTimeout(() => s.remove(), (dur * 2 + 5) * 1000);
+  const s = document.createElement('span');
+  s.className = 'petal';
+  const startLeft = Math.random() * 100; // vw
+  const size = 10 + Math.random() * 18;
+  const dur = 8 + Math.random() * 10;
+  const delay = Math.random() * -dur;
+  s.style.left = startLeft + 'vw';
+  s.style.width = size + 'px';
+  s.style.height = (size * 0.85) + 'px';
+  s.style.animationDuration = dur + 's, ' + (3 + Math.random() * 3) + 's';
+  s.style.animationDelay = delay + 's, ' + (Math.random() * -4) + 's';
+  // subtle rotation shape
+  s.style.borderRadius = `${60 + Math.random() * 30}% ${40 + Math.random() * 30}% ${60 + Math.random() * 30}% ${40 + Math.random() * 30}%`;
+  petals.appendChild(s);
+  // cleanup when finished a couple of cycles
+  setTimeout(() => s.remove(), (dur * 2 + 5) * 1000);
 }
 // initial burst
 for (let i = 0; i < PETAL_COUNT; i++) spawnPetal();
@@ -41,7 +41,7 @@ setInterval(() => spawnPetal(), 600);
 const gallery = document.getElementById('gallery');
 const shots = 4;
 function svgDataURI(hue, text) {
-    const svg = `
+  const svg = `
       <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 800 600'>
         <defs>
           <linearGradient id='g' x1='0' x2='1'>
@@ -59,42 +59,47 @@ function svgDataURI(hue, text) {
         <text x='50%' y='58%' dominant-baseline='middle' text-anchor='middle'
               font-family='Arial' font-size='22' fill='hsl(${(hue + 330) % 360},28%,32%)' opacity='.9'>Đăng & Tuyên</text>
       </svg>`;
-    return 'data:image/svg+xml;utf8,' + encodeURIComponent(svg);
+  return 'data:image/svg+xml;utf8,' + encodeURIComponent(svg);
 }
 const imgUrls = ['./download.jpg', './download (1).jpg', './download (2).jpg', './download (3).jpg']
 for (let i = 0; i < shots; i++) {
-    const div = document.createElement('div');
-    div.className = 'shot';
-    if (i % 5 === 0) div.classList.add('tall');
-    if (i % 7 === 0) div.classList.add('wide');
-    const img = document.createElement('img');
-    img.alt = 'Ảnh kỷ niệm';
-    img.loading = 'lazy';
-    // img.src = svgDataURI(330 + (i*10)%60, 'Kỷ niệm');
-    img.src = imgUrls[i];
-    div.appendChild(img);
-    gallery.appendChild(div);
+  const div = document.createElement('div');
+  div.className = 'shot';
+  if (i % 5 === 0) div.classList.add('tall');
+  if (i % 7 === 0) div.classList.add('wide');
+  const img = document.createElement('img');
+  img.alt = 'Ảnh kỷ niệm';
+  img.loading = 'lazy';
+  // img.src = svgDataURI(330 + (i*10)%60, 'Kỷ niệm');
+  img.src = imgUrls[i];
+  div.appendChild(img);
+  gallery.appendChild(div);
 }
 
 // ===== Appear on scroll (sections & shots) =====
 const io = new IntersectionObserver(entries => {
-    entries.forEach(e => {
-        if (e.isIntersecting) {
-            e.target.classList.add('in');
-            io.unobserve(e.target);
-        }
-    });
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('in');
+      io.unobserve(e.target);
+    }
+  });
 }, { threshold: .18 });
 
 document.querySelectorAll('.reveal, .shot').forEach(el => io.observe(el));
 
 // ===== Accessibility niceties =====
 document.addEventListener('keydown', (e) => {
-    if ((e.key === 'Enter' || e.key === ' ') && !invite.classList.contains('show')) {
-        openBtn.click();
-    }
+  if ((e.key === 'Enter' || e.key === ' ') && !invite.classList.contains('show')) {
+    openBtn.click();
+  }
 });
 
 // ===== Helper: replace gallery with your real photos =====
 // Chỉ cần thay img.src bằng đường dẫn ảnh thật của bạn,
 // hoặc chèn thêm <div class="shot"><img src="..."/></div> vào #gallery.
+const audio = document.getElementById('myAudio');
+document.getElementById('openBtn').addEventListener('click', () => {
+  audio.currentTime = 59;
+  audio.play();
+});
