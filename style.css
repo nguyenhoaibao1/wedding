@@ -22,6 +22,7 @@
 
 
   body {
+      display: contents;
       margin: 0;
       font-family: "Sriracha", 'Dancing Script', cursive, 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       color: var(--ink);
@@ -46,7 +47,7 @@
   }
 
   .envelope-wrap {
-    max-height: 400px;
+      max-height: 400px;
       position: relative;
       width: min(540px, 92vw);
       aspect-ratio: 4/3;

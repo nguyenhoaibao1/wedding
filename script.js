@@ -145,6 +145,13 @@ const params = new URLSearchParams(window.location.search);
 
 // Lấy giá trị của "name" và "age"
 let username = params.get('name');
-if(!username) username = 'Anh/Chị'
+if (username) {
+  username = username.replace("-", " ")
+} else username = 'Anh/Chị'
 // Gắn vào HTML
-document.getElementById('name').textContent = username;
+const elements = document.getElementsByClassName('invite-to');
+
+// Lặp qua HTMLCollection và gán text
+for (let i = 0; i < elements.length; i++) {
+  elements[i].textContent = username;
+}
