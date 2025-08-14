@@ -140,3 +140,11 @@ const x = setInterval(function () {
     document.getElementById("countdown").innerHTML = "ĐÃ HẾT GIỜ!";
   }
 }, 1000);
+
+const params = new URLSearchParams(window.location.search);
+
+// Lấy giá trị của "name" và "age"
+let username = params.get('name');
+if(!username) username = 'Anh/Chị'
+// Gắn vào HTML
+document.getElementById('name').textContent = username;

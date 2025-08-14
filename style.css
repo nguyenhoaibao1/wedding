@@ -34,21 +34,24 @@
 
   /* ===== Scene (envelope stage) ===== */
   .scene {
-      /* min-height: 100dvh;
-      display: grid;
-      place-items: center;
-      position: relative;
-      padding: 28px 16px; */
+      /* min-height: 100dvh; */
+      /* display: grid; */
+      /* place-items: center; */
+      /* position: relative; */
+      /* padding: 28px 16px; */
       display: flex !important;
       flex-wrap: wrap;
-      justify-content: center;
+      justify-content: center !important;
+      flex-direction: column;
   }
 
   .envelope-wrap {
+    max-height: 400px;
       position: relative;
       width: min(540px, 92vw);
       aspect-ratio: 4/3;
       perspective: 1200px;
+      margin: 0 auto;
   }
 
   .envelope {
